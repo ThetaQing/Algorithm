@@ -5,7 +5,7 @@
 #define COMPOSITE 0 ; // ºÏÊý
 
 bool Primality(unsigned __int64 N);
-bool MillerRabin(unsigned __int64 N);
+bool MilleRabin(unsigned __int64 N);
 bool Witness(__int64 a, __int64 n);
 
 #endif

@@ -100,9 +100,17 @@ bool Witness(__int64 a, __int64 n)
 		如，6是以35为模的1 的非平凡平方根。)
 * 算法分析：如果随机取k个底数做测试的话，准确率可以达到至少1-4^(-k)
 * 时间复杂度： O((logn)^3)
+* example：
+	N=561,若检验数a = 7
+	n-1 = 560 = 2^4 * 35;
+	第一步计算x0 ≡ a^35 ≡ 241(mod 561)
+	因此计算序列X = <241,298,166,67,1>
+	所以在最后一次平方步骤中发现一个1 的非平凡平方根
+	因为a^280 ≡ 67 (mod 561),a^560 ≡ 1 (mod n)。
+	因此，a = 7是n为合数的证据，Witness(7, N)返回TRUE，Mille-Rabin返回COMPOSITE。
 * 算法详细分析：https://www.zhihu.com/question/308322307 以及 算法导论Page 565
 ****************/
-bool MillerRabin(unsigned __int64 N) // 测试失败
+bool MilleRabin(unsigned __int64 N) // 测试失败
 {
 	vector <int> test_num = { 2,3,5,7,11,13,17 };  // 算法导论中采用的是随机数，这里采用大部分判断质数的函数isPrime中的检验数
 	for (int i = 0; i < test_num.size() && test_num[i] < N; ++i)
