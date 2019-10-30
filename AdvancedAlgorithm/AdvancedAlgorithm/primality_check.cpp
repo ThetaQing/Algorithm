@@ -46,7 +46,7 @@ bool Primality(unsigned __int64 N)  // unsigned __int64的最大值18446744073709551
 				a^(n-1) mod n != 1 mod n
 			令n-1 = 2^t * u,其中，t≥1且u是奇数，即n-1的二进制表示是奇数u的二进制表示后面跟上恰好t个0.因此
 				a^(n-1) mod n == [a^(u)]^(2^t) mod n
-			所以通过先计算a^(u) mod n，再对结果连续平方t次来计算a^(n-1) mod n.
+			所以通过先计算a^(u) mod n，再对结果连续平方t次来计算a^(n-1) mod n.（同余的乘法性质,对余数平方取模就可）
 * 算法原理：仅当n是合数时，才可能存在以n为模的1的非平凡平方根。
 * 算法详细分析：https://blog.csdn.net/maxichu/article/details/45458569以及 算法导论Page 567
 ****************/
@@ -66,7 +66,7 @@ bool Witness(__int64 a, __int64 n)
 	for (int i = 0; i < j; ++i)
 	{
 		tem = x;
-		x = (x * x) % n;  
+		x = (x * x) % n;  // 根据同余的乘法性质有a≡b(mod m)，c≡d(mod m)，则ac≡bd(mod m)
 		if (x == 1 && tem != 1 && tem != n - 1)  // 这个部分的第三个条件还是没太懂.第一个和第二个条件表示1和1和一个非平凡平方根(tem)同余,是合数，提前结束循环
 		{
 			return true;  // 当且仅当a为合数n的证据时，返回TRUE
