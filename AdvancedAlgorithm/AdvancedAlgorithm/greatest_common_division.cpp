@@ -28,6 +28,10 @@
 
 #include <algorithm>
 #include "greatest_common_division.h"
+#include "primality_check.h"
+#include <vector>
+using namespace std;
+
 // 递归实现
 int GcdEuclidRecursion(int m, int n)
 {
@@ -89,14 +93,79 @@ int GcdContinuousIntegerTest(int m, int n)
 
 * 算法实现：
 
-	非递归实现：gcd_common_prime_factors(m,n)
+	非递归实现：GcdCommonPrimeFactors(m,n)
 * 时间复杂度：
-	考虑最坏的情况是公约数为1，循环做了t-1次，最好的情况是只做一次
-	所以时间复杂度为	O(n) = n/2
+	O(n*(logn)^3)
+	
 */
 int GcdCommonPrimeFactors(int m, int n)
 {
-	return 0;
+	int result = 1;
+
+	std::vector<int> prime_m, prime_n;
+
+	// 对m进行质因数分解
+	// 如果m是质数，m = 1 * m
+	if (MilleRabin(m))
+		prime_m.push_back(m);
+	else
+	{
+		for (int temp = m, prime = 2; temp > 1; )
+		{
+			if (temp % prime)  // 如果prime不是temp的因式，prime + 1
+				prime += 1;
+
+			else if (MilleRabin(prime))
+			{
+				temp = temp / prime;  // 如果prime是temp的因式，更新temp
+				prime_m.push_back(prime);  // 如果prime是质数，添加进质因数列表
+			}
+			else
+				prime += 1;  // 如果是因数但又不是质数，更新prime
+		}
+	}
+
+	// 对n进行质因数分解
+	// 如果n是质数，n = 1 * n
+	if (MilleRabin(n))
+		prime_n.push_back(n);
+	else
+	{
+		for (int temp = n, prime = 2; temp > 1; )
+		{
+			if (temp % prime)  // 如果prime不是temp的因式，prime + 1
+				prime += 1;
+
+			else if (MilleRabin(prime))
+			{
+				temp = temp / prime;  // 如果prime是temp的因式，更新temp
+				prime_n.push_back(prime);  // 如果prime是质数，添加进质因数列表
+			}
+			else
+				prime += 1;  // 如果是因数但又不是质数，更新prime
+		}
+	}
+
+	while (!prime_m.empty() && !prime_n.empty())
+	{
+		if (prime_m[0] == prime_n[0])
+		{
+			result = result * prime_m[0];// 如果相等，相乘
+			prime_m.erase(prime_m.begin());  // 清楚
+			prime_n.erase(prime_n.begin());
+		}
+		else if (prime_m[0] < prime_n[0])  // 移除小的那个因数
+		{
+			prime_m.erase(prime_m.begin());  
+		}
+		else
+			prime_n.erase(prime_n.begin());
+	}
+	
+
+	
+	
+	return result;
 }
 
 
