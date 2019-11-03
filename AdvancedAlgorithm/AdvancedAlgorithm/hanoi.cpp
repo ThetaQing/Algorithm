@@ -32,9 +32,9 @@ void HanoiRecursion(unsigned int n, char A, char B, char C)
 		Move(A, C);
 	else
 	{
-		HanoiRecursion(n - 1, A, C, B);  //步骤1 按ACB数序执行N-1的汉诺塔移动
-		Move(A, C);  //步骤2   中间的一步是把最大的一个盘子由A移到C上去；
-		HanoiRecursion(n - 1, B, A, C);  //步骤3 按BAC数序执行N-1的汉诺塔移动
+		HanoiRecursion(n - 1, A, C, B);  //步骤1 按ACB数序执行N-1的汉诺塔移动,先把n-1个盘子从A通过C的中转运到B上
+		Move(A, C);  //步骤2   中间的一步是把最大的一个盘子由A移到C上去；再把最后一个大盘子运到目标C上
+		HanoiRecursion(n - 1, B, A, C);  //步骤3 按BAC数序执行N-1的汉诺塔移动；最后把B上的n-1个盘子通过A中运回C上。
 	}	
 }
 
@@ -50,57 +50,102 @@ void Move(char A, char C)
 }
 
 
-/*****************函数说明****************
-* 函数名：Hanoi(n)
-* 函数参数：
-* 函数返回值：
-* 函数功能：
-* 实现方法：非递归实现
-	
 
-* 时间复杂度: 
-*/
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
 
-
+/******************函数说明**************
+* 函数名：CreateStack()
+* 函数参数：无
+* 函数返回值：返回一个指向Stack结构体的指针
+* 函数功能：创建一个Stack对象并初始化
+*/
 Stack* CreateStack()
 {
 	Stack* S;
-	S = (Stack*)malloc(sizeof(struct Problem));
+	S = new Stack;
 	S->Next = NULL;
 	return S;
 }
-
+/******************函数说明**************
+* 函数名：IsEmpty(Stack* S)
+* 函数参数：一个Stack型指针
+* 函数返回值：bool值，为空返回true
+* 函数功能：判断一个栈是否为空
+*/
 bool IsEmpty(Stack* S)
 {
 	return (S->Next == NULL);
 }
-
+/******************函数说明**************
+* 函数名：Push(Stack* S, int n, char A, char B, char C)
+* 函数参数：压栈对象，结构体的变量参数实现
+* 函数返回值：空
+* 函数功能：压栈，将参数赋值给压栈对象的next值
+*/
 void Push(Stack* S, int n, char A, char B, char C)
 {
-	Stack* TmpCell;
-	TmpCell = (Stack*)malloc(sizeof(struct Problem));
+	Stack* TmpCell; // 定义一个栈
+	TmpCell = new Stack;
 	TmpCell->n = n;
 	TmpCell->src = A;
 	TmpCell->mid = B;
 	TmpCell->dest = C;
 	TmpCell->Next = S->Next;
-	S->Next = TmpCell;
+	S->Next = TmpCell;  // 把这个栈赋值给S->next
 }
-
+/******************函数说明**************
+* 函数名：Pop(Stack* S, Stack* curPrb)
+* 函数参数：出栈对象，返回值
+* 函数返回值：返回一个指向Stack的指针，即出栈对象的栈顶元素
+* 函数功能：出栈
+*/
 Stack* Pop(Stack* S, Stack* curPrb)
 {
 	Stack* FirstCell;
-	FirstCell = (Stack*)malloc(sizeof(struct Problem));
+	FirstCell = new Stack;
 	FirstCell = S->Next;
-	curPrb->n = FirstCell->n; curPrb->src = FirstCell->src; curPrb->mid = FirstCell->mid; curPrb->dest = FirstCell->dest;
+	curPrb->n = FirstCell->n; 
+	curPrb->src = FirstCell->src;
+	curPrb->mid = FirstCell->mid;
+	curPrb->dest = FirstCell->dest;
 	S->Next = FirstCell->Next;
-	free(FirstCell);
+	delete FirstCell;
 	return curPrb;
 }
+/*****************函数说明****************
+* 函数名：Hanoi(n)
+* 函数参数：盘子数目，unsigned int类型
+* 函数返回值：无，输出移动过程
+* 函数功能：实现对n个盘子的汉诺塔转移过程
+* 实现方法：堆栈实现
+* 实现思路：栈是后进先出，所以顺序恰好和递归相反。
+			主要思路和递归是一样的，即先把n-1个盘子通过C柱转移到B柱，
+			再把最后一个盘子转移到C柱，最后把B柱上的盘子通过A柱转移到C柱。
+			并且每次都是重复两个盘子的操作。
+			
+			归纳起来就是：
+				1、第一次压栈按照ABC分别为起始柱中转柱终点柱的顺序初始化，出栈判断是否一个盘子，否，按照起始柱中转柱终点柱为ABC的顺序转入第二步，否则，转入第六步；
+				2、压栈，按照BAC的顺序将n-1个盘子从B转移到C；
+				3、压栈，按照ABC的顺序将第n个盘子从A转移到C；
+				4、压栈，按照ACB的顺序将n-1个盘子从A转移到B。
+				5、出栈，即将第4步压栈的结果出栈，若n != 1，按照当前出栈的起始柱中转柱终点柱的顺序转入第二步，否则，转入第六步；
+				6、输出从起始柱向终点柱转移的信息。
+			
+			可以理解为每一次出栈就是对当前过程的压栈实现，比如出栈结果为ACB，n=2时，三次压栈分别是：
+				C->A->B n=1;
+				A->C->B n=1;
+				A->B->C n=1.
+			依次出栈顺序为：
+				A->B->C n=1;
+				A->C->B n=1;
+				C->A->B n=1.
+			实际上就是把两个盘子从A柱移动到B柱的实现。
+				
 
+* 时间复杂度:
+*/
 void Hanoi(unsigned int n)
 {
 	
@@ -110,17 +155,18 @@ void Hanoi(unsigned int n)
 	while (!IsEmpty(S))
 	{
 		Stack* curPrb;
-		curPrb = (Stack*)malloc(sizeof(struct Problem));
+		curPrb = new Stack;
 		curPrb = Pop(S, curPrb);
-		if (curPrb->n == 1)printf("%c -> %c\n", curPrb->src, curPrb->dest);
+		if (curPrb->n == 1)
+		printf("%c -> %c\n", curPrb->src, curPrb->dest);
 		else
 		{
-			Push(S, curPrb->n - 1, curPrb->mid, curPrb->src, curPrb->dest);//堆栈的顺序和递归正好相反
+			Push(S, curPrb->n - 1, curPrb->mid, curPrb->src, curPrb->dest);  //堆栈的顺序和递归正好相反
 			Push(S, 1, curPrb->src, curPrb->mid, curPrb->dest);
 			Push(S, curPrb->n - 1, curPrb->src, curPrb->dest, curPrb->mid);
 		}
-		free(curPrb);
+		delete curPrb;
 	}
-	free(S);
+	delete S;
 
 }
