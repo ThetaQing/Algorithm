@@ -59,8 +59,8 @@ void BubbleSort(vector <int> &vec)
 }
 
 /************函数说明***********
-* 函数名：SelectionSort(vector vec)
-* 函数参数：待排序的整数数组
+* 函数名：SelectionSort(int *vec, int len)
+* 函数参数：待排序的整数数组，数组长度
 * 函数返回值：无。通过引用传参，将已排好序的数组替换掉原来没有排序的数组
 * 函数功能：实现对输入数组的排序
 * 函数算法：选择排序：首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，
@@ -91,8 +91,8 @@ void SelectionSort(int *vec, int len)
 }
 
 /************函数说明***********
-* 函数名：InsertionSort(vector vec)
-* 函数参数：待排序的整数数组
+* 函数名：InsertionSort(int *vec, int len)
+* 函数参数：待排序的整数数组,数组长度
 * 函数返回值：无。通过引用传参，将已排好序的数组替换掉原来没有排序的数组
 * 函数功能：实现对输入数组的排序
 * 函数算法：交换排序：通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入
@@ -104,23 +104,19 @@ void SelectionSort(int *vec, int len)
 			6、重复步骤2~5
 * 时间复杂度： O(n)
 **/
-void InsertionSort(vector<int> &vec)
+void InsertionSort(int *vec, int len)
 {
-	int temp = vec[1];
-	for (int i = 1; i < vec.size(); ++i)
+	int temp = 0;
+	for (int i = 1; i < len; ++i)
 	{
 		temp = vec[i];
-		vec.erase(remove(vec.begin() + i, vec.begin() + i, 1));
-		for (int j = i-1; j >= 0; --j)
+		int j = i-1;
+		while (j >= 0 && temp < vec[j] )
 		{
-			if (temp > vec[j])
-			{
-				vec.insert(vec.begin() + j + 1, temp);
-				break;
-			}
-			else if(j == 0)
-				vec.insert(vec.begin(), temp);
+			vec[j + 1] = vec[j];  // 向后移动一个位置，第一次实际上是覆盖vec[i]，由此腾出插入temp的位置
+			--j;  // 进行下一个数的比较
 		}
+		vec[j+1] = temp;  // 如果不满足循环条件，说明此时vec[j] < temp，temp插入该元素的后面
 	}
 }
 

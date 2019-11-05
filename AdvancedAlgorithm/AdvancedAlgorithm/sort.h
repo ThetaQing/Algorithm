@@ -5,7 +5,7 @@
 
 void BubbleSort(std::vector <int>& vec);
 void SelectionSort(int* vec, int len);
-void InsertionSort(std::vector<int>& vec);
+void InsertionSort(int* vec, int len);
 #endif
 
 
