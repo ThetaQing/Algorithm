@@ -157,3 +157,98 @@ void ShellSort(int* arr, int len)
 	
 }
 
+/************函数说明***********
+* 函数名：vector<int> MergeSort(vector<int> arr, int start, int end)
+* 函数参数：待排序的整数数组,待排序中起始位置索引，待排序数组的终止位置索引，整个数组都进行排序为(ArrayName, 0, ArrayName.size()-1)
+* 函数返回值：返回排好序的数组
+* 函数功能：实现对输入数组的排序
+* 函数算法：归并排序：建立在归并操作上的一种有效的排序算法。
+			该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。
+			将已有序的子序列合并，得到完全有序的序列；
+			即先使每个子序列有序，
+			再使子序列段间有序。
+			若将两个有序表合并成一个有序表，称为2-路归并。
+			1、把长度为n的输入序列分成两个长度为n/2的子序列；
+			2、对这两个子序列分别采用归并排序；
+			3、将两个排序好的子序列合并成一个最终的排序序列。
+* 时间复杂度： O(nlog2n)
+* 空间复杂度：O(n)
+
+* 
+
+**/
+// 归并两个数组的函数声明
+vector<int> Merge(vector<int> left, vector<int> right);
+
+vector<int> MergeSort(vector<int> arr, int start, int end)
+{ 
+	vector <int> left, right, result;
+
+	if (start < end)  // 还可以继续分支
+	{
+		left = MergeSort(arr, start, (start + end) / 2);  // 递归分支
+		right = MergeSort(arr, (start + end) / 2 + 1, end);  // 递归分支
+		return Merge(left, right);  // 合并左右两支
+	}
+	else  // 只剩一个元素时，返回这个元素
+	{
+		result.push_back(arr[start]);
+		return result;
+	}	
+
+}
+
+/************函数说明***********
+* 函数名：vector<int> Merge(vector<int> left, vector<int> right)
+* 函数参数：两个有序数组，从小到大
+* 函数返回值：返回这两个数组合并排序的数组
+* 函数功能：实现对两个输入有序数组的排序
+* 函数算法：归并
+			1、比较两个数组公共长度部分，谁小push谁
+			2、若right还有剩余元素未push，全部push到总数组末尾
+			3、若left还有剩余元素未push，全部push到总数组末尾
+			4、返回总数组
+* 时间复杂度： O(nlog2n)
+* 空间复杂度：O(n)
+
+*
+
+**/
+vector<int> Merge(vector<int> left, vector<int> right)
+{
+	int i1 = 0, i2 = 0, i = 0;
+	int len1 = left.size();  // 第一个数组的长度
+	int len2 = right.size();  // 第二个数组的长度
+	vector <int> result;  // 返回的排序数组
+	while (i1 < len1 && i2 < len2)  // 当两个数组均有元素未push时
+	{
+		if (left[i1] < right[i2])  // push小的元素到结果数组中
+		{
+			result.push_back(left[i1]);
+			i1 += 1;
+		}
+		else
+		{
+			result.push_back(right[i2]);
+			i2 += 1;
+		}
+
+	}
+	if (i1 >= len1)  // 当第一个数组元素全部push完后，将第二个数组剩余元素全部push到结果数组中
+	{
+		while (i2 < len2)
+		{
+			result.push_back(right[i2]);
+			i2 += 1;
+		}
+	}
+	if (i2 >= len2)  // 反之亦然
+	{
+		while (i1 < len1)
+		{
+			result.push_back(left[i1]);
+			i1 += 1;
+		}
+	}
+	return result;  // 返回排序好的数组
+}
