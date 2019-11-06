@@ -158,7 +158,7 @@ void Hanoi(unsigned int n)
 		curPrb = new Stack;
 		curPrb = Pop(S, curPrb);
 		if (curPrb->n == 1)
-		printf("%c -> %c\n", curPrb->src, curPrb->dest);
+			printf("%c -> %c\n", curPrb->src, curPrb->dest);
 		else
 		{
 			Push(S, curPrb->n - 1, curPrb->mid, curPrb->src, curPrb->dest);  //堆栈的顺序和递归正好相反

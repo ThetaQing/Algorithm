@@ -6,11 +6,11 @@ void HanoiRecursion(unsigned int n, char A, char B, char C);
 //∑«µ›πÈ µœ÷
 void Hanoi(unsigned int n);
 
-typedef struct Problem {
+struct Stack {
 	int n;
 	char src, mid, dest;
-	struct Problem* Next;
-}Stack;
+	struct Stack* Next;
+};
 bool IsEmpty(Stack* S);
 void Push(Stack* S, int n, char A, char B, char C);
 Stack* Pop(Stack* S, Stack* curPrb);
