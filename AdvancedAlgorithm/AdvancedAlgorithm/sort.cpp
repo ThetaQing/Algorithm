@@ -44,14 +44,14 @@ using std::vector;
 
 void BubbleSort(vector <int> &vec)
 {
-	int count = vec.size();  // 记录比较的轮数
+	size_t count = vec.size();  // 记录比较的轮数,size_t的真实类型与操作系统有关，在64位机上是8字节，32位机上是4字节，是无符号数
 	for (int j = 0; j < count; ++j)
 	{
 		// 对每个元素从第一个到已排序的数比较一次
 		for (int i = 0; i < count - 1; ++i)
 		{
-			if (vec[i] > vec[i + 1])
-				swap(vec[i], vec[i + 1]);  // 比较两个相邻的数，小数放在大数前面
+			if (vec[i] > vec[i+1])
+				swap(vec[i], vec[i+1]);  // 比较两个相邻的数，小数放在大数前面
 		}  // 每完成一轮，便多一个已排序好的数，即这一轮的最后一个，便可以减少一个数的比较
 
 		count -= 1;
@@ -218,8 +218,8 @@ vector<int> MergeSort(vector<int> arr, int start, int end)
 vector<int> Merge(vector<int> left, vector<int> right)
 {
 	int i1 = 0, i2 = 0, i = 0;
-	int len1 = left.size();  // 第一个数组的长度
-	int len2 = right.size();  // 第二个数组的长度
+	size_t len1 = left.size();  // 第一个数组的长度
+	size_t len2 = right.size();  // 第二个数组的长度
 	vector <int> result;  // 返回的排序数组
 	while (i1 < len1 && i2 < len2)  // 当两个数组均有元素未push时
 	{
@@ -437,4 +437,58 @@ int Right(int i)
 	return 2 * i + 2;
 }
 
+/************函数说明***********
+* 函数名：void CountingSort(int* arr, int len)
+* 函数参数：待排序数组，数组长度
+* 函数返回值：数组指针隐性返回已排序的数组
+* 函数功能：对输入数组进行排序
+* 函数算法：计数排序，核心在于将输入的数据值转化为键存储在额外开辟的数组空间中，作为一种线性时间复杂度的排序，计数排序要求输入的数据必须是有确定范围的整数。
+			1、找出待排序的数组中最大和最小的元素；
+			2、统计数组中每个值为i的元素出现的次数，存入数组C的第i项；
+			3、对所有的计数累加（从C中的第一个元素开始，每一项和前一项相加）；
+			4、反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1。
+
+* 数据类型：数组
+* 时间复杂度： O(n+k)
+* 空间复杂度： O(n+k)
+* 稳定
+
+*
+
+**/
+
+void CountingSort(int* arr, int len)
+{
+	
+	int min = 0, max = 0; 
+	// 找到最大值和最小值
+	for (int i = 0 ; i < len; ++i)
+	{
+		if (arr[i] > arr[max])
+			max = i;
+		if (arr[i] < arr[min])
+			min = i;
+	}
+	// 申请一片内存，内存大小为最大值-最小值+1，即可能出现的每一个数分配一个内存空间
+	int length = arr[max] - arr[min] + 1;
+	int* bucket = new int[length]();  // 申请一片内存空间
+	// 新数组存储的数表示这个下标对应的数出现的个数，下标+最小值即为这个数的大小
+	for (int i = 0 ,temp = 0; i < len; ++i)
+	{
+		temp = arr[i] - arr[min];  // 求出新数组的下标
+		bucket[temp] += 1;  // 计数+1
+	}
+	min = arr[min];  // 记录最小值
+	// 将新数组内的值覆盖原来的数组
+	for (int i = 0, j = 0; i < length; ++i)
+	{
+		while (bucket[i]>0)  // 当bucket[i]不为0时，即bucket[i]表示的值出现了bucket[i]次
+		{
+			arr[j] = i + min;  // 读取这个数，并覆盖原来的数组
+			j += 1;
+			bucket[i] -= 1;  // 读取一个-1
+		}
+	}
+	delete[] bucket;  // 释放分配的内存空间
+}
 
