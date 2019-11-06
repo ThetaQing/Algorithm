@@ -327,10 +327,10 @@ int Partition(int *arr, int left, int right)
 
 
 /************函数说明***********
-* 函数名：
-* 函数参数：
-* 函数返回值：
-* 函数功能：
+* 函数名：void HeapSort(int* arr,int len)
+* 函数参数：待排序数组，数组长度
+* 函数返回值：数组指针形式隐性返回排序的数组
+* 函数功能：将输入数组排序
 * 函数算法：利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。
 			1、将初始待排序关键字序列(R1,R2….Rn)构建成大顶堆，此堆为初始的无序区；
 			2、将堆顶元素R[1]与最后一个元素R[n]交换，此时得到新的无序区(R1,R2,……Rn-1)和新的有序区(Rn),且满足R[1,2…n-1]<=R[n]；
@@ -345,36 +345,96 @@ int Partition(int *arr, int left, int right)
 			所以在最大堆中，父节点的值总是大于或等于其子节点的值，即
 				arr[parent(i)] >= arr[i]
 			恒成立。
-* 时间复杂度： 
-* 空间复杂度： 
+* 时间复杂度： O(nlogn)
+* 空间复杂度： O(1)
+* 不稳定，相等的元素可能在叶子节点上被交换到父节点上
 
 *
 
 **/
-// 返回节点i的父节点索引
+// 函数声明
 int Parent(int i);
-// 简单粗暴的想法，时间复杂度O(n^2)
+int Left(int i);
+int Right(int i);
+void BuildMaxHeap(int* arr, int len);  // 建立最大堆
+void Heapify(int* arr, int len, int i);  // 将第i个节点调整成堆
+
 void HeapSort(int* arr,int len)
 {
-	int length = len;
-	while (length > 0)
+	int last = len-1;
+	BuildMaxHeap(arr, len);  // 初始化最大堆
+	
+	while (last > 0)
 	{
-		// 通过定义父节点的值总是大于其子节点
-		for (int i = length - 1; Parent(i) >= 0; --i)  // 形成堆
-		{
-			if (arr[i] > arr[Parent(i)])
-				swap(arr[i], arr[Parent(i)]);
-		}
-		// 循环完所有节点之后，最大堆也形成了
-		swap(arr[0], arr[length - 1]);  // 交换最大值和该最大堆的最后一个元素
-		length -= 1;  // 该堆的最后一个不参与构建新的堆
+		swap(arr[0], arr[last]); // 最大值转移
+		// last表示数组中最后一个元素的索引，在交换一次之后，新的数组长度刚好是上一个数组最后一个元素的索引
+		Heapify(arr, last, 0);  // 对新的数组进行堆化,从上到下开始调整！！！	
+		last -= 1;
+		
+	}	
+}
+/************函数说明***********
+* 函数名：void BuildMaxHeap(int* arr, int len) 
+* 函数参数： 待排序数组，数组长度，注意是长度
+* 函数返回值：数组指针做参数，返回最大堆排序的数组
+* 函数功能：将无序数组初始化为最大堆
+* 实现方法：定义法，最大堆的定义，父节点的值比左右节点的值都大
+* 注意：初始化的时候是从下到上的顺序，要将最大的数一步一步移到父节点处，如果从上往下，最大值可能在最后一层非叶子节点上
+
+*/
+void BuildMaxHeap(int* arr, int len)  // 从下到上初始化！！！！
+{
+	
+	// 从第一个非叶子节点开始
+	for (int i = Parent(len-1); i >= 0; --i)
+	{
+		Heapify(arr, len, i);  // 从父节点开始堆化
+
+	}
+}
+/************函数说明***********
+* 函数名：void Heapify(int* arr, int len, int i)
+* 函数参数： 待排序数组，数组长度，待堆化的节点索引
+* 函数返回值：数组指针做参数，返回以节点i为根节点的最大堆排序的数组
+* 函数功能：将节点i堆化，以节点i为父节点的最大堆
+* 实现方法：定义法，最大堆的定义，父节点的值比左右节点的值都大
+* 注意：每一次交换之后都要重新堆化，从上到下，因为上面的部分已经是最大堆的一部分了
+
+*/
+void Heapify(int* arr, int len, int i)
+{
+	int left = Left(i);
+	int right = Right(i);
+	
+	if (left < len && arr[i] < arr[left])  // 比较左边
+	{
+		swap(arr[i], arr[left]);
+		Heapify(arr, len, left);  // 发生交换，对新的数组堆化
+	}
+	if (right < len && arr[i] < arr[right])  // 比较右边
+	{
+		swap(arr[i], arr[right]);
+		Heapify(arr, len, right);   // 发生交换，对新的数组堆化
 	}
 	
+	
+
 }
 
+// 返回节点i的父节点
 int Parent(int i)
 {
 	return (i - 1) / 2;
+}
+// 返回节点i的左节点
+int Left(int i)
+{
+	return 2 * i + 1;
+}
+// 返回节点i的右节点
+int Right(int i)
+{
+	return 2 * i + 2;
 }
 
 
