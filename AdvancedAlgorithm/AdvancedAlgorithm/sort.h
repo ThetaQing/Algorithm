@@ -9,6 +9,8 @@ void InsertionSort(int* vec, int len);
 void ShellSort(int* arr, int len);
 std::vector<int> MergeSort(std::vector<int>arr, int start, int end);
 std::vector<int> Merge(std::vector<int> left, std::vector<int> right);
+void QuickSort(int *arr, int left, int right);
+void HeapSort(int* arr, int len);
 #endif
 
 
