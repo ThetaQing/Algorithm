@@ -492,7 +492,7 @@ void CountingSort(int* arr, int len)
 	delete[] bucket;  // 释放分配的内存空间
 }
 /************函数说明***********
-* 函数名：void CountingSort(int* arr, int len)
+* 函数名：void BucketSort(int* arr, int len)
 * 函数参数：待排序数组，数组长度
 * 函数返回值：数组指针隐性返回已排序的数组
 * 函数功能：对输入数组进行排序
@@ -550,9 +550,84 @@ void BucketSort(int* arr, int len)
 			}
 		}
 	}
-
-
-
+	delete[] bucket;  // 释放内存空间
 }
+
+/************函数说明***********
+* 函数名：void RadixSort(int* arr, int len)
+* 函数参数：待排序数组，数组长度
+* 函数返回值：数组指针隐性返回已排序的数组
+* 函数功能：对输入数组进行排序
+* 函数算法：基数排序：按照低位先排序，然后收集；再按照高位排序，然后再收集；依次类推，直到最高位。最后的次序就是高优先级高的在前，高优先级相同的低优先级高的在前。
+			1、取得数组中的最大数，并取得位数；
+			2、arr为原始数组，从最低位开始取每个位组成radix数组；
+			3、对radix进行计数排序（利用计数排序适用于小范围数的特点）；
+
+* 数据类型：
+* 时间复杂度：
+* 空间复杂度：
+* 稳定
+
+* 注意：仅支持整数
+
+**/
+void RadixSort(int* arr, int len)
+{
+	int count = 1;  // 记录位数,最小一位数
+	int  max = 0;
+	// 找到最大值
+	try 
+	{
+		for (int i = 0; i < len; ++i)
+		{
+			if (arr[i] > max)
+				max = arr[i];
+			if (arr[i] < 0)
+				throw "the input of RadixSort() must be positive integer!!!";
+		}
+	
+		// 求最大值的位数
+		while (max / 10)
+		{
+			count += 1;
+			max = max / 10;
+		}
+
+		int temp = 0;  // 临时变量，记录当前排序的位数，从最低位开始直到最高位
+		while (temp < count)
+		{
+			vector<int>* bucket = new vector<int>[10]();  // 申请一片内存空间
+			// 对该位数进行计数排序
+			for (int i = 0; i < len; ++i)  // 遍历数组
+			{
+				int index = (arr[i] / int(pow(10, temp))) % 10;
+				bucket[index].push_back(arr[i]);  // 将对应索引的值存入桶中
+
+			}
+			int index = 0;
+			// 将桶中的数取出来覆盖原来的数组
+			for (int i = 0; i < 10; ++i)
+			{
+				for (int j = 0; j < bucket[i].size(); ++j)
+				{
+					arr[index] = bucket[i][j];
+					index += 1;
+				}
+			}
+			delete[] bucket;  // 释放内存空间
+			temp += 1;  // 下一位数
+		}
+	}
+	catch (const char* e)
+	{
+		cerr << e << endl;
+	}
+	catch (...)
+	{
+		cerr << "other error." << endl;
+	}	
+	
+}
+
 
 
