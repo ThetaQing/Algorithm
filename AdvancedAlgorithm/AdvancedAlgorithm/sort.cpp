@@ -174,7 +174,7 @@ void ShellSort(int* arr, int len)
 			3、将两个排序好的子序列合并成一个最终的排序序列。
 * 时间复杂度： O(nlog2n)
 * 空间复杂度：O(n)
-
+* 稳定
 * 
 
 **/
@@ -453,7 +453,7 @@ int Right(int i)
 * 空间复杂度： O(n+k)
 * 稳定
 
-*
+* 注意：计数排序申请的额外空间跨度是从最小元素值到最大元素值，存在空间浪费现象
 
 **/
 
@@ -491,4 +491,68 @@ void CountingSort(int* arr, int len)
 	}
 	delete[] bucket;  // 释放分配的内存空间
 }
+/************函数说明***********
+* 函数名：void CountingSort(int* arr, int len)
+* 函数参数：待排序数组，数组长度
+* 函数返回值：数组指针隐性返回已排序的数组
+* 函数功能：对输入数组进行排序
+* 函数算法：桶排序：计数排序的升级版，利用了函数的映射关系。
+			桶排序 (Bucket sort)的工作的原理：
+			假设输入数据服从均匀分布，将数据分到有限数量的桶里，每个桶再分别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排）。
+			1、设置一个定量的数组当作空桶；
+			2、遍历输入数据，并且把数据一个一个放到对应的桶里去；（函数中采用vector表示桶）
+			3、对每个不是空的桶进行排序；（函数中采用归并排序）
+			4、从不是空的桶里把排好序的数据拼接起来。
+* 改进之处：申请空间为最大值到最小值之间每一个固定区域申请空间，尽量减少了元素值大小不连续情况下的空间浪费现象
+* 算法关键：
+		1、元素值域的划分，过于宽泛演变成比较排序，过于严苛演变成计数排序
+		2、排序算法的选择，对于各个桶中元素的排序，决定了复杂度和稳定性
+* 数据类型：数组和vector
+* 时间复杂度： O(N+N(log2N-log2M))，其中M表示桶的个数
+* 空间复杂度： O(N+M)
+* 稳定
+
+*
+
+**/
+
+void BucketSort(int* arr, int len)
+{
+	int min = 0, max = 0;
+	// 找到最大值和最小值
+	for (int i = 0; i < len; ++i)
+	{
+		if (arr[i] > max)
+			max = arr[i];
+		if (arr[i] < min)
+			min = arr[i];
+	}
+
+	int size = max / 10 - min / 10 + 1;  // 桶的数量
+	vector<int>* bucket = new vector<int>[size]();  // 申请内存空间，由于不确定每个桶中含有多少元素，所以用vector容器
+	int index = 0;
+	for (int i = 0; i < len; ++i)  // 遍历数组
+	{
+		index = arr[i] / 10 - min / 10;  // arr[i]对应的桶索引
+		bucket[index].push_back(arr[i]);
+	}
+	index = 0; // 索引清零
+	vector <int> temp;  // 临时变量，存储归并排序后返回的数组
+	for (int i = 0; i < size; ++i)  // 遍历桶
+	{
+		if (!bucket[i].empty())  // 如果桶内有元素的话
+		{
+			temp = MergeSort(bucket[i], 0, bucket[i].size() - 1);  // 归并排序
+			for (int j = 0; j <temp.size() && index < len; ++j)
+			{
+				arr[index] = temp[j];  // 将排序完成的值覆盖掉原来的数组值
+				index += 1;
+			}
+		}
+	}
+
+
+
+}
+
 
