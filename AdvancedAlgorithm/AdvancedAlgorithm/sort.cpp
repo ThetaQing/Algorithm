@@ -563,9 +563,9 @@ void BucketSort(int* arr, int len)
 			2、arr为原始数组，从最低位开始取每个位组成radix数组；
 			3、对radix进行计数排序（利用计数排序适用于小范围数的特点）；
 
-* 数据类型：
-* 时间复杂度：
-* 空间复杂度：
+* 数据类型：数组
+* 时间复杂度：O(d*2n)，d表示位数，即关键字，依次存入桶中执行n次，覆盖原数组执行n次，反复执行d次
+* 空间复杂度：O(n+k)，k表示桶的数量
 * 稳定
 
 * 注意：仅支持整数
@@ -586,21 +586,15 @@ void RadixSort(int* arr, int len)
 				throw "the input of RadixSort() must be positive integer!!!";
 		}
 	
-		// 求最大值的位数
-		while (max / 10)
+		vector<int>* bucket = new vector<int>[10]();  // 申请一片内存空间
+		// 对该位数进行计数排序
+		int posi = 1;
+		while(max/posi)  // 从最低位开始排序
 		{
-			count += 1;
-			max = max / 10;
-		}
 
-		int temp = 0;  // 临时变量，记录当前排序的位数，从最低位开始直到最高位
-		while (temp < count)
-		{
-			vector<int>* bucket = new vector<int>[10]();  // 申请一片内存空间
-			// 对该位数进行计数排序
 			for (int i = 0; i < len; ++i)  // 遍历数组
 			{
-				int index = (arr[i] / int(pow(10, temp))) % 10;
+				int index = (arr[i] / posi) % 10;  // 取出posi位上的数，如123，当posi=10时，便是求十位数的值，即2
 				bucket[index].push_back(arr[i]);  // 将对应索引的值存入桶中
 
 			}
@@ -613,11 +607,15 @@ void RadixSort(int* arr, int len)
 					arr[index] = bucket[i][j];
 					index += 1;
 				}
+				bucket[i].clear();  // 清空数据
 			}
-			delete[] bucket;  // 释放内存空间
-			temp += 1;  // 下一位数
+			posi *= 10;
+
 		}
+		delete[] bucket;  // 释放内存空间
+			
 	}
+	
 	catch (const char* e)
 	{
 		cerr << e << endl;
