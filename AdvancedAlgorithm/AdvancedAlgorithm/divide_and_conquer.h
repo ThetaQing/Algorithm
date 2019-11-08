@@ -20,6 +20,7 @@ template <class eleT> eleT SumRecursive(eleT* arr, int start, int end)
 
 }
 
+__int64 IntegerMultiplyDec(int x, int y, int n);
 
 #endif // !__DIVIDE_AND_CONQUER_H__
 #pragma once
