@@ -14,8 +14,8 @@ using namespace std;
 
 /************函数说明***********
 * 函数名：__int64 IntegerMultiplyDec(int x, int y, int n)
-* 函数参数：两个相乘的正整数，最大正整数的位数
-* 函数返回值：两个正整数的乘积
+* 函数参数：两个相乘的整数，n为最大正整数的位数
+* 函数返回值：两个整数的乘积
 * 函数功能：实现大整数相乘
 * 函数算法：karatsuba乘法
 	现有两个大数，x，y。
@@ -67,4 +67,102 @@ __int64 IntegerMultiplyDec(int x, int y, int n)
 	sum = sum * (x_highy_high * int(pow(10, n/2 + n/2)) + (x_highy_high + x_lowy_low + x_highx_lowy_highy_low) * power + x_lowy_low);  // 这里注意x_highy_high * int(pow(10, n/2 + n/2))，避免n为奇数产生的误差
 	return sum;
 	
+}
+
+/************函数说明***********
+* 函数名：void CoverChessBoard(int row_left, int column_left, int row_special, int column_special, int size)
+* 函数参数：棋盘左上角的行列坐标，特殊格的行列坐标，棋盘尺寸
+* 函数返回值：空
+* 函数功能：实现棋盘覆盖
+* 问题描述：
+在一个2^k×2^k （k≥0）个方格组成的棋盘中，恰有一个方格与其他方格不同，称该方格为特殊方格。
+显然，特殊方格在棋盘中可能出现的位置有4^k种，因而有4^k种不同的棋盘，
+棋盘覆盖问题（chess cover problem）要求用4种不同形状的L型骨牌覆盖给定棋盘上除特殊方格以外的所有方格，且任何2个L型骨牌不得重叠覆盖。
+* 函数算法：分治法
+			将棋盘不断减小，直到最后一个
+			1、确定递归结束条件为当前尺寸为1；
+			2、判断特殊格位置
+				（1）如果在左上角，继续递归，不在左上角，将该1/4棋盘的右下角填充为特殊格再递归；
+				（2）如果在右上角，继续递归，否则填充该1/4棋盘的左下角填充为特殊格再递归；
+				（3）如果在左下角，继续递归，否则填充该1/4棋盘的右上角为特殊格再递归；
+				（4）如果在右下角，继续递归，否则填充该1/4棋盘的左上角为特殊格再递归。
+			3、给特殊格填上标记，用了一个全局变量和一个局部变量，保证每一次递归返回后上一次值不变
+**/
+
+
+int chess[8][8];
+
+int number = 1;
+void CoverChessBoard(int row_left, int column_left, int row_special, int column_special, int size)
+{
+	int tie = number++;
+
+	int row_center = row_left + size / 2, column_center = column_left + size / 2;
+	// 递归结束条件
+	if (size == 1)
+	{
+		return;
+	}
+	// 先判断特殊方块的位置
+	// 左上角
+	if (row_special < row_center && column_special < column_center)  
+	{		
+		CoverChessBoard(row_left, column_left, row_special, column_special, size / 2);  // 开始递归
+	}
+	else  
+	{
+		chess[row_center - 1][column_center - 1] = tie;  // 给右下角填上
+		CoverChessBoard(row_left, column_left, row_center-1, column_center - 1, size / 2);  // 开始递归
+		// 进行到这一步了
+	}
+	// 右上角
+	if (row_special < row_center && column_special >= column_center)  
+	{
+		CoverChessBoard(row_left, (column_left + size)/2, row_special, column_special, size / 2);  // 开始递归
+	}
+	else
+	{
+		chess[row_center-1][column_center] = tie;  // 左下角填充
+		CoverChessBoard(row_left, column_center, row_center-1, column_center, size / 2);
+	}
+	// 左下角
+	if (row_special >= row_center && column_special < column_center)  
+	{
+		CoverChessBoard((row_left + size)/2, column_left, row_special, column_special, size / 2);  // 开始递归
+	}
+	else
+	{
+		chess[row_center][column_center - 1] = tie;  // 右上角填上
+		CoverChessBoard(row_center, column_left, row_center, column_center - 1, size / 2);
+
+	}
+	// 右下角
+	if (row_special >= row_center && column_special >= column_center)  
+	{		
+		CoverChessBoard(row_center, column_center, row_special, column_special, size / 2);  // 开始递归
+	}
+	else
+	{
+		chess[row_center][column_center] = tie;  // 左上角填上
+		CoverChessBoard(row_center, column_center, row_center, column_center, size / 2);
+	}
+}
+int main()
+{
+	int row = 2, column = 2;  // 表示特殊方格的行列坐标
+
+	chess[row][column] = 0;
+	CoverChessBoard(0, 0, row, column, 8);
+	for (int i = 0; i < 8; ++i)
+	{
+		for (int j = 0; j < 8; ++j)
+		{
+			cout << chess[i][j] <<"\t";
+		}
+		cout << endl;
+	}
+
+
+	system("pause");
+	return 0;
 }
