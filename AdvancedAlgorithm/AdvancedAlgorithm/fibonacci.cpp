@@ -44,7 +44,7 @@ unsigned int FibRecursion(unsigned int n)
 * 函数功能：求斐波那契数列的第n个数
 * 实现方法：非递归实现，由于直接用公式存在大量的重复计算，所以将这些中间结果直接存储起来后调用
 * 时间复杂度分析：O(n)
-
+* 空间复杂度：O(n)
 
 */
 
@@ -69,7 +69,7 @@ unsigned int FibArray(unsigned int n)
 * 函数功能：求斐波那契数列的第n个数
 * 实现方法：非递归实现
 * 时间复杂度分析：O(n)
-
+* 空间复杂度：O(1)
 
 */
 
