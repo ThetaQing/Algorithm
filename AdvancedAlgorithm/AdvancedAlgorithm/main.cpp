@@ -1,21 +1,20 @@
 #include <iostream>
-#include "greatest_common_division.h"
-#include "primality_check.h"
-#include "modular_exponention.h"
+#include <vector>
+#include "divide_and_conquer.h"
 #include <bitset>
+#include <sstream>
 using namespace std;
-using std::bitset;
+
+
 
 int main()
 {
+	int* arr = new int[50] {1,2,5,3,8,4,7,10,89,23,45};
 	
-	//std::cout << gcd_Euclid_recursion(188, 112) << endl;
-	
-	//std::cout << gcd_continuous_integer_test(112, 188) << endl;
-	int N = 17;
-	//std::cout << Primality(N) << endl;
-	//std::cout << PrimalityImprove(N) << endl;
-	cout << ModularExponention(2, 2, 5) << endl;
+	int temp = FindKthElement(arr, 2, 3,1);
+	cout << temp << endl;
+
+	delete[] arr;
 	system("pause");
 	return 0;
 }

@@ -1,12 +1,13 @@
 #include "divide_and_conquer.h"
 #include <iostream>
 #include <bitset>
+#include "sort.h"
 using namespace std;
 
 /****************文件说明********************
 * 文件名：divide_and_conquer.cpp
 * 文件功能：分治法的典型应用
-*			快速排序；归并排序；连续加法；整数乘法；矩阵连续乘法；棋盘覆盖等
+*			快速排序；归并排序；连续加法；整数乘法；矩阵连续乘法；棋盘覆盖；找到第k个最小值等
 
 
 **/
@@ -87,6 +88,11 @@ __int64 IntegerMultiplyDec(int x, int y, int n)
 				（3）如果在左下角，继续递归，否则填充该1/4棋盘的右上角为特殊格再递归；
 				（4）如果在右下角，继续递归，否则填充该1/4棋盘的左上角为特殊格再递归。
 			3、给特殊格填上标记，用了一个全局变量和一个局部变量，保证每一次递归返回后上一次值不变
+* 时间复杂度：if k > 0:
+				T(k) = 4T(k-1) + O(1)  
+			else
+				T(k) = O(1);
+			所以：T(n) = O(4^k)
 **/
 
 
@@ -147,6 +153,13 @@ void CoverChessBoard(int row_left, int column_left, int row_special, int column_
 		CoverChessBoard(row_center, column_center, row_center, column_center, size / 2);
 	}
 }
+/**********函数说明************
+* 函数名：main（）
+* 函数参数：无
+* 函数返回值：0
+* 函数功能：测试棋盘覆盖函数
+* 使用说明：仅当测试棋盘覆盖时取消注释，测试完成后重新注释
+
 int main()
 {
 	int row = 2, column = 2;  // 表示特殊方格的行列坐标
@@ -166,3 +179,57 @@ int main()
 	system("pause");
 	return 0;
 }
+**/
+
+/**************函数说明**********************
+* 函数名：int FindKthElement(int* arr, int start, int end, int k)
+* 函数参数：arr：一个数组；start：数组查找范围内起始元素的索引；
+			end：数组查找范围内结束元素的索引；k：数组查找范围之内的第k个最小值
+* 函数返回值：输入数组有效查找范围之内的第k个最小值
+* 函数功能：查找输入数组有效查找范围之内的第k个最小值并返回
+* 函数算法：利用快排的思想
+			1、如果分区关键元素正好是第k个元素，返回该元素；
+			2、如果分区关键元素比第k个元素大，即第k个元素在关键元素的左边，对左边递归查找；
+			3、否则在后边递归查找。
+* 注意：1、输入参数k的范围；
+		2、索引与排序的序号区别；
+		3、如果start不为0，要排除掉前start个元素的影响（语句：if (index -  start == k - 1) ），否则会掉入死循环。
+* 时间复杂度：O(nlogn) 最差情况下O(n^2)
+
+**/
+
+int FindKthElement(int* arr, int start, int end, int k)
+{
+	static int len = end - start + 1; // 计算长度，保障k有效
+	try 
+	{
+		if (start == end)
+			return arr[start];
+		if (!k || k > len)  // k必须在数组有效范围内
+			throw "The parameter k must be a positive integer in range of ";
+		// 分区
+		int index = Partition(arr, start, end);  // Partition返回的是在整个数组中的该元素的索引
+		
+		if (index -  start == k - 1)  // 第k个数的索引是k-1，如果不是从0开始查找的，要减去start再与k-1比较
+			return arr[index];
+		else if (index > k - 1)
+		{
+			FindKthElement(arr, start, index - 1, k);  // 对分区的左边进行查找
+		}
+		else
+		{
+			FindKthElement(arr, index + 1, end, k);  // 对分区的右边进行查找
+		}
+	}
+	catch (const char *e)
+	{
+		cerr << e << "[ 1, " << end - start + 1 << "]." << endl;
+	}
+	catch (...)
+	{
+		cerr << "Function FindKthElement Error!!!" <<endl;
+	}
+	
+
+}
+

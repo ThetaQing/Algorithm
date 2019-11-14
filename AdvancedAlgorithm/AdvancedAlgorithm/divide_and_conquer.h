@@ -22,5 +22,6 @@ template <class eleT> eleT SumRecursive(eleT* arr, int start, int end)
 
 __int64 IntegerMultiplyDec(int x, int y, int n);
 void CoverChessBoard(int row_left, int column_left, int row_special, int column_special, int size);
+int FindKthElement(int* arr, int start, int end, int k);
 #endif // !__DIVIDE_AND_CONQUER_H__
 #pragma once
