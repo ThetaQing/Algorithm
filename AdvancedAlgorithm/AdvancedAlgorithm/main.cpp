@@ -3,18 +3,14 @@
 #include "divide_and_conquer.h"
 #include <bitset>
 #include <sstream>
+#include "dynamic_programming.h"
 using namespace std;
 
 
 
 int main()
 {
-	int* arr = new int[50] {1,2,5,3,8,4,7,10,89,23,45};
-	
-	int temp = FindKthElement(arr, 2, 3,1);
-	cout << temp << endl;
-
-	delete[] arr;
+	climbStairs3(3);
 	system("pause");
 	return 0;
 }
