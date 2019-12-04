@@ -161,7 +161,7 @@ int rob(vector<int>& nums) {
 	delete[] price;
 	return index;
 }
-/*输出不对
+
 int rob2(vector<int>& nums) {
 	int n = nums.size();
 	
@@ -170,7 +170,7 @@ int rob2(vector<int>& nums) {
 	if (nums.size() == 1)
 		return nums[0];
 	int index = 2;
-	int curTotal = nums[1];  // 第i-1个房子时总金额
+	int curTotal = max(nums[1],nums[0]);  // 第i-1个房子时总金额
 	int preTotal = nums[0];  // 第i-2个房子时总金额
 	int maxTotal = max(curTotal, preTotal);  // 第i个房子时的总金额
 	while (index < n)
@@ -183,4 +183,55 @@ int rob2(vector<int>& nums) {
 	
 	return maxTotal;
 }
-*/
+
+/******************函数说明*********************
+* 函数名：
+* 函数参数：
+* 函数返回值：
+* 问题描述：
+* 算法描述：
+* 测试信息：
+
+**/
+
+int maxProfit(vector<int>& prices) {
+	if (prices.size() <= 1)
+		return 0;
+	int total = 0;
+	for (int i = 0; i < prices.size(); ++i)
+	{
+		if (i >= 1 && prices[i] > prices[i - 1] )
+			total = total + prices[i];  // 卖出去
+		if (i < prices.size() - 1 && prices[i + 1] > prices[i])
+			total = total - prices[i];  // 买进来
+	}
+	return total;
+}
+/******************************
+
+* 测试信息：
+执行用时 :1728 ms, 在所有 cpp 提交中击败了5.17%的用户
+内存消耗 :9.5 MB, 在所有 cpp 提交中击败了43.78%的用户
+
+**/
+// 只能完成一笔交易
+
+int maxProfit2(vector<int>& prices) {
+	if (prices.size() <= 1)
+		return 0;
+
+	int n = prices.size();
+	int max = 0;
+
+	
+	for (int i = 0; i < n-1; ++i)
+	{
+		auto temp = max_element(prices.begin() + i + 1, prices.end());
+
+		if (*temp - prices[i] > max)
+			max = *temp - prices[i];
+	}
+
+	
+	return max;
+}
