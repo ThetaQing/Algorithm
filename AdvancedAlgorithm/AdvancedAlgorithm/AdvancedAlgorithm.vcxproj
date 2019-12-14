@@ -123,15 +123,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="divide_and_conquer.cpp" />
+    <ClCompile Include="dynamic_programming.cpp" />
+    <ClCompile Include="fibonacci.cpp" />
     <ClCompile Include="greatest_common_division.cpp" />
+    <ClCompile Include="hanoi.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="modular_exponention.cpp" />
     <ClCompile Include="primality_check.cpp" />
+    <ClCompile Include="sort.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="divide_and_conquer.h" />
+    <ClInclude Include="dynamic_programming.h" />
+    <ClInclude Include="fibonacci.h" />
     <ClInclude Include="greatest_common_division.h" />
+    <ClInclude Include="hanoi.h" />
     <ClInclude Include="modular_exponention.h" />
     <ClInclude Include="primality_check.h" />
+    <ClInclude Include="sort.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="readme.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

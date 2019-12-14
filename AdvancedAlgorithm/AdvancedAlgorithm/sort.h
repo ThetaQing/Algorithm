@@ -14,6 +14,7 @@ void HeapSort(int* arr, int len);
 void CountingSort(int* arr, int len);
 void BucketSort(int* arr, int len);
 void RadixSort(int* arr, int len);
+int Partition(int* arr, int left, int right);
 #endif
 
 

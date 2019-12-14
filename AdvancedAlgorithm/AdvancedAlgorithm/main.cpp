@@ -5,16 +5,20 @@
 #include <sstream>
 #include <algorithm>
 #include "dynamic_programming.h"
+#include <unordered_map>
 using namespace std;
 
 
 
 int main()
 {
-	vector<int> test{ 1,2,3,2,6,4 };
-	auto re = max_element(test.begin(), test.end());
-	cout << *re << endl;
-	maxProfit2(test);
+	char ans = 'a' ^ 'b';
+	unordered_map<char, int>test(2);
+	test['a'] += 1;
+	cout << test[0]<<endl;
+	cout << test[1] << endl;
+	if (ans)
+		cout << "ans" << ans;
 	system("pause");
 	return 0;
 }

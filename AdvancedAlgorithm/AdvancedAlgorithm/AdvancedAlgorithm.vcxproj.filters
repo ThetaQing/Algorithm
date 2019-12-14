@@ -27,16 +27,51 @@
     <ClCompile Include="modular_exponention.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="fibonacci.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="hanoi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sort.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="divide_and_conquer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic_programming.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="greatest_common_division.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="primality_check.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="modular_exponention.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="primality_check.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fibonacci.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="hanoi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sort.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="divide_and_conquer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic_programming.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="readme.md">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

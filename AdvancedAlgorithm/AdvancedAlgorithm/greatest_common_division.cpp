@@ -151,7 +151,7 @@ int GcdCommonPrimeFactors(int m, int n)
 		if (prime_m[0] == prime_n[0])
 		{
 			result = result * prime_m[0];// 如果相等，相乘
-			prime_m.erase(prime_m.begin());  // 清楚
+			prime_m.erase(prime_m.begin());  // 清除
 			prime_n.erase(prime_n.begin());
 		}
 		else if (prime_m[0] < prime_n[0])  // 移除小的那个因数
@@ -161,10 +161,7 @@ int GcdCommonPrimeFactors(int m, int n)
 		else
 			prime_n.erase(prime_n.begin());
 	}
-	
-
-	
-	
+		
 	return result;
 }
 

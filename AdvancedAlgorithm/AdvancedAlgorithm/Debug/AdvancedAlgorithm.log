@@ -1,2 +1,6 @@
-﻿  main.cpp
-  AdvancedAlgorithm.vcxproj -> F:\Code\VC++\Advanced-Algorithm\AdvancedAlgorithm\Debug\AdvancedAlgorithm.exe
+﻿  sort.cpp
+main.obj : error LNK2019: 无法解析的外部符号 "class std::vector<int,class std::allocator<int> > __cdecl BubbleSort(class std::vector<int,class std::allocator<int> >)" (?BubbleSort@@YA?AV?$vector@HV?$allocator@H@std@@@std@@V12@@Z)，该符号在函数 _main 中被引用
+    已定义且可能匹配的符号上的提示:
+      "class std::vector<int,class std::allocator<int> > __cdecl BubbleSort(class std::vector<int,class std::allocator<int> > &)" (?BubbleSort@@YA?AV?$vector@HV?$allocator@H@std@@@std@@AAV12@@Z)
+D:\Program Files\MVTec\HALCON-18.05-Progress\lib\x64-win64\halconcpp.lib : warning LNK4272: 库计算机类型“x64”与目标计算机类型“x86”冲突
+F:\Code\VC++\Advanced-Algorithm\Algorithm\AdvancedAlgorithm\Debug\AdvancedAlgorithm.exe : fatal error LNK1120: 1 个无法解析的外部命令
